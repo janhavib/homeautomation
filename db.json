@@ -1,0 +1,21 @@
+{
+  "lights": [
+    {
+      "id": 1,
+      "currentStatus": "OFF"
+    }
+  ],
+  "temps": [
+    {
+      "id": 1,
+      "currentTemp": 81
+    }
+  ],
+  "curtains": [
+    {
+      "id": 1,
+      "curtainStatus": "close",
+      "curtainUpdateTime": "Sun Sep 06 2015 12:22:08 GMT-0700 (PDT)"
+    }
+  ]
+}
