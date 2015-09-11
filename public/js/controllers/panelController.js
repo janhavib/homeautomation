@@ -43,8 +43,7 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
             if(err){
                 console.log(err);
             }else{
-                if(data.length>0){
-                    console.log(data);
+                if(data){
                     $scope.lights = data;
                     setImage();
                 }else{
@@ -136,7 +135,7 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
             if(err){
                 console.log(err);
             }else{
-                if(data.length>0){
+                if(data){
                     $scope.garages = data;
                     setGarageImage();
                 }else{
@@ -179,7 +178,7 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
         if(err){
             console.log(err);
         }else{
-            if(data.length>0){
+            if(data){
                 $scope.temps = data;
                 $scope.currentTemp = parseInt($scope.temps[0].currentTemp);
                 $scope.gauge.value = $scope.currentTemp;
@@ -219,7 +218,7 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
          fetchCurtains();
          fetchGarages();
          fetchTemparatures();
-    },30000);
+    },1000);
 
 
 }]);
