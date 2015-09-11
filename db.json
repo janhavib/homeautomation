@@ -2,20 +2,25 @@
   "lights": [
     {
       "id": 1,
-      "currentStatus": "OFF"
+      "currentStatus": "ON"
     }
   ],
   "temps": [
     {
       "id": 1,
-      "currentTemp": 81
+      "currentTemp": "85"
     }
   ],
   "curtains": [
     {
       "id": 1,
-      "curtainStatus": "close",
-      "curtainUpdateTime": "Sun Sep 06 2015 12:22:08 GMT-0700 (PDT)"
+      "currentStatus": "OPEN"
+    }
+  ],
+  "garages": [
+    {
+      "id": 1,
+      "currentStatus": "OPEN"
     }
   ]
 }

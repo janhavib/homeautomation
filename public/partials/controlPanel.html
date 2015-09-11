@@ -1,36 +1,138 @@
+<nav class="navbar navbar-inverse">
+  <h3 style="color:white">Control Panel</h3>
+</nav>
 <div class="container">
-    <h3>Control Panel</h3>
-    <form name="noteInfo" class="form-horizontal">
-        <div class = "form-group">
-              <label for="lightStatus" class="col-sm-2 control-label">Light Current Status: </label>
-               <div class="col-sm-10">
-                        <p>{{lights[0].currentStatus}}</p>
+     <div class="row">
+            <div class="col-md-3 col-sm-3 text-center">
+                    <label>CurrentState</label>
+                    <div>
+                            <img src="./images/offlight.jpeg" width="50px" height="50px" ng-show="showOffLight">
+                            <img src="./images/onLight.jpeg" width="50px" height="50px" ng-show="showOnLight">
+                    </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+               <label for="changeStatusTime">SetTime</label>
+                <div>
+                  <div class="dropdown">
+                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                      <div class="input-group"><input type="text" class="form-control" data-ng-model="currentTime"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                      <datetimepicker data-ng-model="currentTime" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+                    </ul>
+                  </div>
                 </div>
-        </div>
-        <div class = "form-group">
-          <label for="changeStatusTime" class="col-sm-2 control-label">Set Time: </label>
-          <div class="col-sm-10">
-            <div class="dropdown">
-              <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
-                <div class="input-group"><input type="text" class="form-control" data-ng-model="currentTime" ng-editable="true"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                </div>
-              </a>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <datetimepicker data-ng-model="currentTime" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
-              </ul>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+              <label>SetTo</label>
+              <div>
+                <label style="margin-right:22px"><input type="radio" name="LightOptions" ng-model="data.availableLightOptions.name" value="ON"> ON</label>
+                <label style="margin-right:25px">
+                <input type="radio" name="LightOptions" ng-model="data.availableLightOptions.name" value="OFF"> OFF</label>
+              </div>
+
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+              <br>
+              <button type="submit" class="btn btn-primary btn-md" ng-click="setLightStatus()">Save</button>
+              <toggle-switch ng-model="switchStatus"></toggle-switch>
             </div>
           </div>
-        </div>
-        <div class = "form-group">
-          <label class="col-sm-2 control-label"> Change Status to </label>
-          <div class="col-sm-10">
-            <select ng-model="lightStatus" ng-options="option.name for option in data.availableLightOptions"></select>
-          </div>
-        </div>
-        <div class = "form-group">
-           <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default" ng-click="setLightStatus()">Save</button>
+          <div class="row">
+           <div class="col-md-3 col-sm-3 text-center">
+                   <div class="curtain">
+                      <div>
+                            <img src="./images/images.jpeg" width="50px" height="50px" ng-show="showCloseCurtain">
+                            <img src="./images/opencurtains.jpeg" width="50px" height="50px" ng-show="showOpenCurtain">
+                    </div>
+                    </div>
             </div>
-        </div>
-	</form>
+            <div class="col-md-3 col-sm-3 text-center">
+             <div>
+                <div class="dropdown">
+                  <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                    <div class="input-group"><input type="text" class="form-control" data-ng-model="currentCurtainTime"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="currentCurtainTime" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+             <div>
+                <label><input type="radio" name="curtainOptions" ng-model="data.availableCurtainOptions.name" value="OPEN"> OPEN</label>
+                <label>&nbsp;
+                <input type="radio" name="curtainOptions" ng-model="data.availableCurtainOptions.name" value="CLOSE"> CLOSE</label>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+              <button type="submit" class="btn btn-primary" ng-click="setCurtainStatus()">Save</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class = "col-md-3 col-sm-3 text-center">
+                   <div class="curtain">
+                      <div>
+                            <img src="./images/closedgarage.jpeg" width="50px" height="50px" ng-show="showCloseGarage">
+                            <img src="./images/opengarage.jpg" width="50px" height="50px" ng-show="showOpenGarage">
+                      </div>
+                    </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+             <div>
+                <div class="dropdown">
+                  <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                    <div class="input-group"><input type="text" class="form-control" data-ng-model="currentGarageTime"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="currentGarageTime" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+             <div>
+                 <label><input type="radio" name="garageOptions" ng-model="data.availableGarageOptions.name" value="OPEN"> OPEN</label>&nbsp;
+                <label>
+                <input type="radio" name="garageOptions" ng-model="data.availableGarageOptions.name" value="CLOSE"> CLOSE</label>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+              <button type="submit" class="btn btn-primary" ng-click="setGarageStatus()">Save</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class = "col-md-3 col-sm-3 text-center">
+                   <div>
+                            <h4>{{temps[0].currentTemp}}</h4>
+                            <div id="gaugeContainer" style="height:70px; width:70px; display: inline-block"></div>
+                    </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+              <div>
+                <div class="dropdown">
+                  <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                    <div class="input-group"><input type="text" class="form-control" data-ng-model="currentTempTime"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="currentTempTime" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+             <div>
+                <p>{{temp}}</p>
+                <input type="range" min = "0" max = "100" style="width :120px; margin-left:70px" ng-model="temp">
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-3 text-center">
+              <button type="submit" class="btn btn-primary" ng-click="setTemp()">Save</button>
+            </div>
+        </div>   
 </div>

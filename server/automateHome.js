@@ -266,6 +266,10 @@ function checkAllStatus(){
             delete item.changeStatusTo;
             delete item.statusUpdateTime;
             db.save();
+        }else if(item.hasOwnProperty('tempUpdateTime') && unixTime >= item.tempUpdateTime){
+            item.currentTemp = item.setTempTo;
+            delete item.setTempTo;
+            delete item.tempUpdateTime;
         }
       });
     }

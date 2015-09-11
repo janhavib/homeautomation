@@ -1,26 +1,26 @@
 'use strict';
 var app = angular.module('homeautomation');
 
-app.factory('lightService',['$http',function($http){
-    var lightService = {
-        fetchLights : fetchLights,
-        updateLightStatus : updateLightStatus,
-        fetchLightStatus : fetchLightStatus,
+app.factory('tempService', ['$http', function($http){
+     var tempService = {
+        fetchTemparatures : fetchTemparatures,
+        getTemp : getTemp,
+        setTemp : setTemp
     }
-    return lightService;
+    return tempService;
 
-    function fetchLights(callback){
-        $http.get('/lights').success(function(response){
+    function fetchTemparatures(callback){
+        $http.get('/temps').success(function(response){
             callback(null, response);
         }).error(function(error){
             callback(error, null);
         })
     }
 
-    function fetchLightStatus(params, callback){
+    function getTemp(params, callback){
       var id = params.id;
       if(params){
-          $http.get('/lights/'+id).success(function(response){
+          $http.get('/temps/'+id).success(function(response){
                 callback(null, response);
             }).error(function(error){
                 callback(error, null);
@@ -30,9 +30,9 @@ app.factory('lightService',['$http',function($http){
        }
     }
 
-    function updateLightStatus(params, callback){
+    function setTemp(params, callback){
         if(params){
-            $http.put('/lights',params).success(function(response){
+            $http.put('/temps',params).success(function(response){
                 callback(null, response);
             }).error(function(error){
                 callback(error, null);
@@ -41,4 +41,4 @@ app.factory('lightService',['$http',function($http){
             callback("Invalid Params", null);
         }
     }
-}]);
+}])
