@@ -1,13 +1,14 @@
 'use strict';
 var app = angular.module('homeautomation');
 
-app.controller('panelController',['$scope','lightService','curtainService', 'garageService', 'tempService',function($scope, lightService, curtainService, garageService, tempService){
+app.controller('panelController',['$scope','lightService','curtainService', 'garageService', 'tempService','$interval',function($scope, lightService, curtainService, garageService, tempService, $interval){
     $scope.displayMsg = false;
     $scope.lights = [];
     $scope.curtains = [];
     $scope.garages = [];
     $scope.temps = [];
     $scope.temp = 0;
+    $scope.currentTemp = 0;
 
     //Configure the options 
     $scope.data = {
@@ -35,27 +36,36 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
     $scope.currentGarageTime = new Date();
     $scope.currentTempTime = new Date();
     //fetch all the lights
-    lightService.fetchLights(function(err, data){
-        if(err){
-            console.log(err);
-        }else{
-            if(data.length>0){
-                $scope.lights = data;
-                setImage();
+
+
+    function fetchLights(){
+        lightService.fetchLights(function(err, data){
+            if(err){
+                console.log(err);
             }else{
-                $scope.displayMsg = true;
-                $scope.msg = "No lights!";
+                if(data.length>0){
+                    console.log(data);
+                    $scope.lights = data;
+                    setImage();
+                }else{
+                    $scope.displayMsg = true;
+                    $scope.msg = "No lights!";
+                }
             }
-        }
-    });
+        });
+    }
 
 
     //set Image
     function setImage(){
-        if($scope.lights[0].currentStatus === "OFF"){
+        if($scope.lights[0].currentStatus && $scope.lights[0].currentStatus === "OFF"){
             $scope.showOffLight = true; 
-        }else if($scope.lights[0].currentStatus === "ON"){
+            $scope.showOnLight = false; 
+
+        }else if($scope.lights[0].currentStatus && $scope.lights[0].currentStatus === "ON"){
             $scope.showOnLight = true;
+            $scope.showOffLight = false; 
+
         }
     }
 
@@ -64,7 +74,7 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
     //change Light Status
     $scope.setLightStatus = function(){
         var params = {};
-        params.changeStatusTo = $scope.data.availableLightOptions.name;//lightStatus.name;
+        params.changeStatusTo = $scope.data.availableLightOptions.name;
         var unix_time = new Date($scope.currentTime).getTime()/1000;
         params.statusUpdateTime = unix_time;
         params.id = $scope.lights[0].id;
@@ -78,26 +88,30 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
     }
 
 
-    curtainService.fetchCurtains(function(err, data){
-        if(err){
-            console.log(err);
-        }else{
-            if(data.length>0){
-                $scope.curtains = data;
-                setCurtainImage();
+    function fetchCurtains(){
+        curtainService.fetchCurtains(function(err, data){
+            if(err){
+                console.log(err);
             }else{
-                $scope.displayMsg = true;
-                $scope.msg = "No curtains!";
+                if(data.length>0){
+                    $scope.curtains = data;
+                    setCurtainImage();
+                }else{
+                    $scope.displayMsg = true;
+                    $scope.msg = "No curtains!";
+                }
             }
-        }
-    })
+        })
+    }
 
 
     function setCurtainImage(){
          if($scope.curtains[0].currentStatus === "CLOSE"){
             $scope.showCloseCurtain = true; 
+            $scope.showOpenCurtain = false;
         }else if($scope.curtains[0].currentStatus === "OPEN"){
             $scope.showOpenCurtain = true;
+            $sceop.showCloseCurtain = false;
         }
     }
 
@@ -117,19 +131,21 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
     }
 
 
-    garageService.fetchGarages(function(err, data){
-        if(err){
-            console.log(err);
-        }else{
-            if(data.length>0){
-                $scope.garages = data;
-                setGarageImage();
+    function fetchGarages(){
+        garageService.fetchGarages(function(err, data){
+            if(err){
+                console.log(err);
             }else{
-                $scope.displayMsg = true;
-                $scope.msg = "No garages!";
+                if(data.length>0){
+                    $scope.garages = data;
+                    setGarageImage();
+                }else{
+                    $scope.displayMsg = true;
+                    $scope.msg = "No garages!";
+                }
             }
-        }
-    })
+        })
+    }
 
     $scope.setGarageStatus = function(){
         var params = {};
@@ -150,24 +166,37 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
     function setGarageImage(){
          if($scope.garages[0].currentStatus === "CLOSE"){
             $scope.showCloseGarage = true; 
+            $scope.showOpenGarage = false;
         }else if($scope.garages[0].currentStatus === "OPEN"){
             $scope.showOpenGarage = true;
+            $scope.showCloseGarage = false;
         }
     }
-    tempService.fetchTemparatures(function(err, data){
+
+    
+    function fetchTemparatures(){
+        tempService.fetchTemparatures(function(err, data){
         if(err){
             console.log(err);
         }else{
             if(data.length>0){
                 $scope.temps = data;
-                console.log($scope.temps);
-                //setGarageImage();
+                $scope.currentTemp = parseInt($scope.temps[0].currentTemp);
+                $scope.gauge.value = $scope.currentTemp;
             }else{
                 $scope.displayMsg = true;
                 $scope.msg = "No temp!";
             }
         }
-    })
+        })
+    }
+
+    $scope.gauge = {
+          name: 'Temperature',
+          opacity: 0.55,
+          value: 0,
+          text:''
+    };
 
     $scope.setTemp = function(){
         var params = {};
@@ -183,4 +212,14 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
             }
         });
     }
+
+    //Keep polling to fetch current status for all
+    $interval(function(){
+         fetchLights();
+         fetchCurtains();
+         fetchGarages();
+         fetchTemparatures();
+    },1000);
+
+
 }]);

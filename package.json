@@ -6,6 +6,10 @@
     "lowdb": "^0.10.2",
     "moment": "^2.10.6",
     "ng-table": "^0.5.4",
+    "should": "^7.1.0",
     "underscore-db": "^0.9.0"
+  },
+  "devDependencies": {
+    "supertest": "^1.1.0"
   }
 }
