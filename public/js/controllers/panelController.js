@@ -219,7 +219,7 @@ app.controller('panelController',['$scope','lightService','curtainService', 'gar
          fetchCurtains();
          fetchGarages();
          fetchTemparatures();
-    },1000);
+    },30000);
 
 
 }]);
